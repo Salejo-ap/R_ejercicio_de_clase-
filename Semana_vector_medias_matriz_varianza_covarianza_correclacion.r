@@ -3,8 +3,11 @@
 ## Importar datos necesarios
 
 path <-"C:\\Users\\glopa\\Desktop\\R\\Olimpiadas.txt"
-datos <- read.table(path, header = TRUE, sep = "\t")
+## si el archivo con los datos esta en la misma carpeta en la que se guarda el script:
+### datos <- read.table("Olimpiadas.txt", header = TRUE, sep = "\t")
+
 datos
+# Estadisticas descriptivas 
 
 ## sacar la matriz  de variables numericas
 
