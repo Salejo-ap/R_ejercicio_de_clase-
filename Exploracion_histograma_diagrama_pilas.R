@@ -1,5 +1,4 @@
 
-
 # --- Ingresamos los datos --- #
 X <- matrix ( c (42 ,52 ,48 ,58 , 4 ,5 ,4 ,3) , ncol = 2 , nrow = 4)
 X <- data.frame ( X )
