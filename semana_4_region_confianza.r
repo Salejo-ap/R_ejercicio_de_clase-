@@ -1,0 +1,1 @@
+# Semana 4 probar normal multivariado y encontrar regiones de confianza 
