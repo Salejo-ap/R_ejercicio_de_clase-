@@ -26,7 +26,7 @@ datos <- as.data.frame(lapply(datos, as.numeric))
 datos
 
 ### vector de medias
-medias <- apply(datos, 2, mean)
+medias <- colMeans(datos [,-1])
 medias
 
 ### matriz de varianza y covarianza
@@ -73,7 +73,7 @@ L3 <- IC3$conf.int[2]-IC3$conf.int[1]
 ###en este caso con se esta haciendo de forma univariada, el la confianza es igual a (1-alpha)^p lo cual da 0.729
 
 ### Intervalos simultaneos con el T de hotelling
-OneSampleHT2(datos[,-1], mu0 = unname(medias[2:4]), alpha = 0.10)$CI
+OneSampleHT2(datos[,-1], mu0 = medias, alpha = 0.10)$CI
 
 ### intervalos de Bonferroni
 
@@ -98,3 +98,20 @@ l3 <- round(ICB3[2] - ICB3 [1], 2)
 
 ### segun entendi, el T de hotteling se usa para la inferencia con respecto al vector de medias
 ### el test de Bonferroni es para la inferencua individual de cada una de las medias 
+
+n <- nrow(variables) # Muestra
+p <- ncol(variables) # Variables
+alpha <- 0.05
+# 3. Multiplicador c r t i c o de Hotelling
+f_critico <- qf(1 - alpha, df1 = p, df2 = n - p)
+mult_hotelling <- sqrt((p * (n - 1) / (n - p)) * f_critico)
+
+a <- rep(0, p) ; names(a) <- colnames(variables)
+a [" X1 _ Sweat _ rate "] <- 1
+a [" X2 _ Sodium "] <- -1
+
+# 5. C l c u l o del intervalo
+media_comb <- sum(a * medias)
+ee_comb <- as.numeric(sqrt(t(a) %*% (covarianza/n) %*% a))
+lim_inf <- media_comb - (mult_hotelling * ee_comb)
+lim_sup <- media_comb + (mult_hotelling * ee_comb)
