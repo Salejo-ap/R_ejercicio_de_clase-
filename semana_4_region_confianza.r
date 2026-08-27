@@ -1,4 +1,4 @@
-# Semana 4 probar normal multivariado y encontrar regiones de confianza 
+# Semana 4 probar normal multivariado y encontrar regiones de confianza
 ## importar librerias necesarias
 
 install.packages("HSAUR2")
@@ -6,6 +6,7 @@ install.packages("MVA")
 install.packages ("MVTests")
 install.packages("MVN")
 install.packages("mvShapiroTest")
+install.packages("ICSNP")
 require(MVTests)
 library(ICSNP)
 library(HSAUR2)
@@ -14,12 +15,12 @@ library(MVN)
 library(mvShapiroTest)
 
 ## importar datos TXT
-datos <- read.table("sweat_data.txt", header=TRUE)
+datos <- read.table("sweat_data.txt", header = TRUE)
 datos
 
-#-------------------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------# # nolint
 ## Preparacion
-#-------------------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------------------------# # nolint
 
 ### convercion de los datos a numerico
 datos <- as.data.frame(lapply(datos, as.numeric))
@@ -37,9 +38,9 @@ covarianza
 correlacion <- cor(datos)
 correlacion
 
-#------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------# nolint
 ## Prueba de normalidad
-#------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------# nolint
 
 ### Para hacer una prueba de normalidad multivariada se tiene la libreria MVA, dado las caracteristicas del conjunto de datos
 ### para la realizacion de este test formal se selecciona el test de shapiro por p=<5 y n>5p ademas que se comporta muy bien en
@@ -50,7 +51,7 @@ variables <- data.frame(datos$X1_Sweat_rate, datos$X2_Sodium, datos$X3_Potassium
 matriz <- as.matrix.data.frame(variables)
 mvShapiro.Test(matriz)
 
-#### los resultados del test muestra un p-valor de 0.2567 no rechazando la hiportesis nula, siendo una distribucion normal multivariada.
+# los resultados del test muestra un p-valor de 0.2567 no rechazando la hiportesis nula, siendo una distribucion normal multivariada
 
 #-------------------------------------------------------------------------------------------------------------------------------#
 ## Region de confianza
