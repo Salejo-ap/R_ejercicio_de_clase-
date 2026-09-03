@@ -107,7 +107,58 @@ vc
 #retardaría la perdida ósea en mujeres adultas. Un investigador midió el contenido mineral óseo por absorciometría  # nolint
 #de fotones. Se registraron mediciones para tres huesos sobre los lados dominante y no dominante. # nolint
 # Un año después se volvieron a medir los mismos 24 participantes.
-#A) Exhiba las hipótesis del test y verifique los supuestos poblacionales de la muestra # nolint
-#B) Verifique los supuestos para aplicar el test.
-#C) Aplique el test para datos multivariados pareados. Determine si ha habido pérdidade hueso. # nolint
+# caraga de dataset
+data_huesos <- datos_completos[["Huesos_pareado"]]
+data_huesos
 
+# division de los datos, primera vez y segunda vez y eliminacion de columnas no numericas y ordinales # nolint: line_length_linter.
+data_huesos_primera <- subset(data_huesos, Group == "Time_1")
+data_huesos_segunda <- subset(data_huesos, Group == "Time_2")
+data_huesos_primera$Group <- NULL
+data_huesos_primera$id <- NULL
+data_huesos_segunda$id <- NULL
+data_huesos_segunda$Group <- NULL
+data_huesos_primera <- as.data.frame(lapply(data_huesos_primera, as.numeric))
+data_huesos_segunda <- as.data.frame(lapply(data_huesos_segunda, as.numeric))
+#eliminacion ultimo registro del tiempo 1 
+data_huesos_primera <- data_huesos_primera[-nrow(data_huesos_primera), ]
+data_huesos_primera
+#vector de medias y matriz de covarianzas para primera y segunda medicion
+medias_primera <- colMeans(data_huesos_primera)
+medias_segunda <- colMeans(data_huesos_segunda)
+medias_primera
+medias_segunda
+covarianza_primera <- cov(data_huesos_primera)
+covarianza_segunda <- cov(data_huesos_segunda)
+covarianza_primera <- as.matrix(covarianza_primera)
+covarianza_segunda <- as.matrix(covarianza_segunda)
+correlacion_primera
+correlacion_segunda
+
+#A) Exhiba las hipótesis del test y verifique los supuestos poblacionales de la muestra # nolint
+
+#B) Verifique los supuestos para aplicar el test.
+testdornik <- mvn(data = data_huesos_primera, mvn_test = "doornik_hansen")
+testdornik$multivariate_normality
+testdornik2 <- mvn(data = data_huesos_segunda, mvn_test = "doornik_hansen")
+testdornik2$multivariate_normality
+#C) Aplique el test para datos multivariados pareados. Determine si ha habido pérdidade hueso. # nolint
+# Calculo de diferencias
+
+DJ1 <- data_huesos_primera$Dominant_radius - data_huesos_segunda$Dominant_radius
+DJ2 <- data_huesos_primera$Radius - data_huesos_segunda$Radius
+DJ3 <- data_huesos_primera$Dominat_humerus - data_huesos_segunda$Dominat_humerus
+DJ4 <- data_huesos_primera$Humerus - data_huesos_segunda$Humerus
+DJ5 <- data_huesos_primera$Dominant_ulna - data_huesos_segunda$Dominant_ulna
+DJ6 <- data_huesos_primera$Ulna - data_huesos_segunda$Ulna
+Dbarra <- c(mean(DJ1), mean(DJ2), mean(DJ3), mean(DJ4), mean(DJ5), mean(DJ6))
+SD <- cov(cbind(DJ1, DJ2, DJ3, DJ4, DJ5, DJ6))
+n <- nrow(data_huesos_primera)
+p <- 6
+alpha <- 0.05
+# Estadistica T2 de Hotelling
+T2 <- n * t(Dbarra) %*% solve(SD) %*% Dbarra
+# Valor critico
+vc <- ((( n - 1) * p ) / (n - p) ) * qf( alpha , p , n - p , lower.tail = FALSE )
+T2
+vc
