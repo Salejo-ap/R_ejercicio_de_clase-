@@ -59,8 +59,9 @@ test_mardia_machos$multivariate_normality
 test_mardia_hembras <- mvn(data = tortugas_hembras, mvn_test = "mardia")
 test_mardia_hembras$multivariate_normality
 
-#B) Muestre la formula del estadístico de prueba, reemplazando por los valores que corresponden al ejercicio. 
+#B) Muestre la formula del estadístico de prueba, reemplazando por los valores que corresponden al ejercicio.  # nolint
 #Cuál es el estadístico teórico?
+
 alpha <- 0.05
 
 # Covarianza Pooled
@@ -70,18 +71,32 @@ S_pool
 # Estadistica T2
 dif <- medias_machos - medias_hembras
 T2 <- t(dif) %*% solve((1/24 + 1/24) * S_pool) %*% dif
-# Valor critico
 
-vc <- (( 24 + 24 - 2)*p / ( 24 + 24 - p - 1) ) * qf( alpha, p, 24 + 24 - p - 1, lower.tail = FALSE )
+# Valor critico
+vc <- (( 24 + 24 - 2)*p / ( 24 + 24 - p - 1) ) * qf( alpha, p, 24 + 24 - p - 1, lower.tail = FALSE ) # nolint
 
 #D) Contraste que los vectores de medias son iguales en ambos sexos, suponiendo que # nolint
 #las matrices de covarianzas son iguales. Interprete el resultado.
-
 cat("T2 =", T2, "| Valor critico =", vc, "\n")
 
 #E) Contraste que las matrices de covarianzas son iguales entre sexos. Exhiba las hipótesis a contrastar y el  # nolint
 #estadístico de prueba. Interprete el resultado
-
+#parametros
+p <- 3
+q <- 2
+n1 <- 24
+n2 <- 24
+v1 <- n1 - 1
+v2 <- n2 - 1
+v <- v1 + v2
+Sp <- (1 / v) * (v1 * covarianza_machos + v2 * covarianza_hembras)
+Lambda3 <- v * log(det(Sp)) - (v1 * log(det(covarianza_machos)) + v2 * log(det(covarianza_hembras))) # nolint: line_length_linter.
+b <- (1 / v1 + 1 / v2 - 1 / v)
+rho <- 1 - (((2 * (p^2)) + 3 * p - 1) / (6 * (p + 1) * (q - 1))) * b
+varphi <- rho * Lambda3
+vc <- qchisq(0.05, (1 / 2) * p * (p + 1) * (q - 1), lower.tail = FALSE)
+varphi
+vc
 #----------------------------------------------------------------------#
 
 ##Punto 2
