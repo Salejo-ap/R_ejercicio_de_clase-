@@ -18,3 +18,7 @@ eigenvectores <- eigen(correlacion)$vectors
 
 eigenvalores
 eigenvectores
+
+## Cálculo de la proporción de varianza explicada
+proporcion_varianza <- eigenvalores / sum(eigenvalores)
+proporcion_varianza
