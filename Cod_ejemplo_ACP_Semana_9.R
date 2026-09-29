@@ -93,8 +93,3 @@ biplot(acp,choices = c(2,3))
 # Acp desde la matriz de covarianzas
 # ( opci´on por defecto )
 acpCov<-princomp(ejemp5_1)
-
-
-
-
-
