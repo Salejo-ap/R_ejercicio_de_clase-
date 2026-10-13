@@ -70,21 +70,28 @@ round(correl$XYcor[1:3, 4:7], 2)
 round(correl$Xcor, 2)
 round(correl$Ycor, 2)
 
-### Preguntas relacionadas a la correlacion entre variables y conjunto de variables 
+### Preguntas relacionadas a la correlacion entre variables y conjunto de variables
+
 #### 1. Describa las correlaciones dentro de cada conjunto. ¿Hay colinealidad en alguno?
+
 # rta: En el conjunto de desempeño se puede observar muy altas correlaciones entre las tres variabeles de desempeño(crec-rent: 0.93, crec-nuevas: 0.88, rent-nuevas: 0.84),
 # indicando un colinealidad entre ellas.
 # En el conjunto de pruebas, se observa que las correlaciones bajas entre las cuatro variables de pruebas(creat-mec: 0.59, creat-abst: 0.15, creat-mat: 0.41, mec-abst: 0.39, mec-mat: 0.57, abst-mat: 0.57),
 # con algunas correlaciones altas entre ciertas variables.
+
 #### 2. Describa las correlaciones cruzadas. ¿Qué prueba se relaciona más con el desempeño? 
+
 # En la validacion cruzada se puede ver variedad de correlacion entre las variables en general de moderadas a altas, siendo la variable mat la que tiene mayor correlacion con las variables de desempeño.
+
 #### 3. ¿Vale la pena hacer un ACC?
+
 #Si se justifica el uso del ACC, ya que hay correlaciones significativas entre los conjuntos de variables, lo que indica que existe una relación lineal entre el desempeño y las pruebas. 
 #Además, la presencia de colinealidad en el conjunto de desempeño sugiere que un análisis de correlación canónica puede ayudar a identificar las combinaciones lineales de variables que mejor explican la relación entre los dos conjuntos.
 
 ## Ajuste de las correlaciones canonicas
 # Escalar variables
-zX <- scale(X); zY <- scale(Y)
+zX <- scale(X)
+zY <- scale(Y)
 acc <- cc(zX, zY)
 
 #correlaciones canonicas
@@ -104,3 +111,21 @@ plot(acc$cor, type = "b", pch = 19, ylim = c(0, 1), xaxt = "n",
      xlab = "Par canónico", ylab = "Correlación canónica",
      main = "Correlaciones canónicas")
 axis(1, at = 1:3)
+
+#### 4. Estandarice las variables y ajuste el ACC con cc(). ¿Cuántos pares canónicos hay y por qué?
+
+# Hay tres pares de canónicos, ya que el número de pares canónicos es igual al mínimo entre el número de variables en cada conjunto. En este caso, 
+# el conjunto X tiene 3 variables y el conjunto Y tiene 4 variables, por lo que el número de pares canónicos es 3.
+
+#### 5. Reporte las correlaciones canónicas y sus cuadrados. Interprete ρ^∗21.
+
+#p1: 0.9944827, corresponde a la combinación lineal óptima entre las pruebas y  la combinación lineal óptima de desempeño, compartiendo el 98.9% de la varianza entre los dos conjuntos de variables.
+#p2: 0.8781065, corresponde a la segunda combinación lineal óptima entre las pruebas y  la combinación lineal óptima de desempeño, compartiendo el 77.1% de la varianza entre los dos conjuntos de variables.
+#p3: 0.3836057, corresponde a la tercera combinación lineal óptima entre las pruebas y  la combinación lineal óptima de desempeño, compartiendo el 14.7% de la varianza entre los dos conjuntos de variables.
+
+#### 6. Compare ρ^∗1 con la mayor correlación cruzada y con la correlación múltiple de cada indicador de desempeño con las 
+# cuatro pruebas (use summary(lm(...))$r.squared). ¿Se cumple lo visto en clase?
+
+# 
+p.asym(acc$cor, nrow(X), ncol(X), ncol(Y))
+prod(1 - acc$cor^2)          # Lambda de Wilks de la primera fila
