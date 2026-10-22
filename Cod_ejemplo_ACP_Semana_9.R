@@ -1,13 +1,12 @@
 # Paquetes
-install.packages(c("FactoMineR","factoextra","tibble"))
+install.packages(c("FactoMineR", "factoextra", "tibble"))
 library(FactoMineR)
 library(factoextra)
 library(readxl)
 library(tibble)
 
 
-bd_gorriones <- read_excel("C:/Users/martinezr.dm/OneDrive - Pontificia Universidad Javeriana/Documents/PUJ_202602/Multivariado/ACP/gorriones.xlsx", 
-                        sheet = "gorriones")
+bd_gorriones <- read_excel("gorriones.xlsx", sheet = "gorriones")
 View(bd_gorriones)
 
 dim(bd_gorriones)
